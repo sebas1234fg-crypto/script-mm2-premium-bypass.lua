@@ -1,5 +1,15 @@
 -- 1. MEGA MENU MM2 2026 - INTERFAZ PREMIUM TOTALMENTE REPARADA
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+
 local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "MM2Menu2026"
+ScreenGui.Parent = PlayerGui
+ScreenGui.ResetOnSpawn = false
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+ScreenGui.Enabled = true
+
 local MainPanel = Instance.new("Frame")
 local TitleBar = Instance.new("Frame")
 local TitleText = Instance.new("TextLabel")
@@ -15,15 +25,12 @@ local TabMisc = Instance.new("TextButton")
 
 local CombatFrame = Instance.new("ScrollingFrame")
 local VisualsFrame = Instance.new("ScrollingFrame")
-local MiscFrame = Instance.new("ScrolPlatformStandlingFrame")
+local MiscFrame = Instance.new("ScrollingFrame")
 
 local SliderLabel = Instance.new("TextLabel")
 local SliderFrame = Instance.new("Frame")
 local SliderButton = Instance.new("TextButton")
 local RestoreButton = Instance.new("TextButton")
-
-ScreenGui.Parent = game:GetService("CoreGui")
-ScreenGui.ResetOnSpawn = false
 
 MainPanel.Name = "DeltaMM2Ultra2026"
 MainPanel.Parent = ScreenGui
@@ -32,6 +39,7 @@ MainPanel.Position = UDim2.new(0.25, 0, 0.15, 0)
 MainPanel.Size = UDim2.new(0, 360, 0, 280)
 MainPanel.Active = true
 MainPanel.Draggable = true
+MainPanel.Visible = true
 
 TitleBar.Name = "TitleBar"
 TitleBar.Parent = MainPanel
@@ -72,6 +80,7 @@ ContentFrame.Parent = MainPanel
 ContentFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
 ContentFrame.Position = UDim2.new(0, 95, 0, 35)
 ContentFrame.Size = UDim2.new(1, -95, 1, -35)
+
 local function styleTabBtn(btn, text, yPos)
     btn.Parent = TabBar
     btn.Size = UDim2.new(1, 0, 0, 40)
@@ -92,7 +101,7 @@ local function setupSubFrame(frm)
     frm.Size = UDim2.new(1, 0, 1, 0)
     frm.BackgroundTransparency = 1
     frm.ScrollBarThickness = 5
-    frm.CanvasSize = UDim2.new(0, 0, 2.2, 0)
+    frm.CanvasSize = UDim2.new(0, 0, 2.5, 0)
     frm.Visible = false
 end
 
@@ -163,6 +172,7 @@ local SpeedButton = Instance.new("TextButton")
 local BrightButton = Instance.new("TextButton")
 local FreecamButton = Instance.new("TextButton")
 local ResetButton = Instance.new("TextButton")
+local FlyButton = Instance.new("TextButton")
 
 -- Ubicar Botones de la Pestaña Combat
 styleHackBtn(ClickShootButton, CombatFrame, "Clic para Disparar Asesino: OFF", 10, Color3.fromRGB(150, 40, 40))
@@ -187,16 +197,27 @@ styleHackBtn(SpeedButton, MiscFrame, "Velocidad Humana (+50% WalkSpeed): OFF", 1
 styleHackBtn(BrightButton, MiscFrame, "Brillo Total (FullBright): OFF", 150, Color3.fromRGB(180, 140, 40))
 styleHackBtn(FreecamButton, MiscFrame, "Cámara Libre Invisible: OFF", 185, Color3.fromRGB(120, 0, 120))
 styleHackBtn(ResetButton, MiscFrame, "Suicidio de Emergencia (Reset)", 220, Color3.fromRGB(180, 0, 0))
+styleHackBtn(FlyButton, MiscFrame, "Vuelo (Fly Mode): OFF", 255, Color3.fromRGB(0, 100, 100))
 
 -- Barra Deslizante de Color Sincronizada Total
-SliderLabel.Parent = MiscFrame; SliderLabel.Size = UDim2.new(0, 230, 0, 15); SliderLabel.Position = UDim2.new(0.04, 0, 0, 260)
-SliderLabel.BackgroundTransparency = 1; SliderLabel.Text = "Desliza para cambiar el color del panel:"; SliderLabel.TextColor3 = Color3.fromRGB(200, 200, 200); SliderLabel.TextSize = 10
+SliderLabel.Parent = MiscFrame
+SliderLabel.Size = UDim2.new(0, 230, 0, 15)
+SliderLabel.Position = UDim2.new(0.04, 0, 0, 295)
+SliderLabel.BackgroundTransparency = 1
+SliderLabel.Text = "Desliza para cambiar el color del panel:"
+SliderLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+SliderLabel.TextSize = 10
 
-SliderFrame.Parent = MiscFrame; SliderFrame.Size = UDim2.new(0, 230, 0, 12); SliderFrame.Position = UDim2.new(0.04, 0, 0, 280)
+SliderFrame.Parent = MiscFrame
+SliderFrame.Size = UDim2.new(0, 230, 0, 12)
+SliderFrame.Position = UDim2.new(0.04, 0, 0, 315)
 SliderFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 
-SliderButton.Parent = SliderFrame; SliderButton.Size = UDim2.new(0, 20, 1, 0); SliderButton.Position = UDim2.new(0, 0, 0, 0)
-SliderButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255); SliderButton.Text = ""
+SliderButton.Parent = SliderFrame
+SliderButton.Size = UDim2.new(0, 20, 1, 0)
+SliderButton.Position = UDim2.new(0, 0, 0, 0)
+SliderButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+SliderButton.Text = ""
 
 local draggingColor = false
 local function updateSliderColor(input)
@@ -223,10 +244,11 @@ end)
 game:GetService("UserInputService").InputEnded:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then draggingColor = false end
 end)
+
 local clickShootEnabled, espEnabled, coinFarmEnabled, noclipEnabled, infiniteJumpEnabled = false, false, false, false, false
 local hitboxEnabled, autoHoldEnabled, sheathEnabled, fakeLagEnabled = false, false, false, false
 local tracersEnabled, radarEnabled, ammoEnabled, overlayEnabled = false, false, false, false
-local brightEnabled, freecamEnabled, speedEnabled = false, false, false
+local brightEnabled, freecamEnabled, speedEnabled, flyEnabled = false, false, false, false
 
 local espHighlights, recolectadas, tracerLines, infoOverlays = {}, {}, {}, {}
 
@@ -328,6 +350,7 @@ task.spawn(function()
         end
     end
 end)
+
 -- Auto-Esconder Cuchillo Sigiloso
 SheathButton.MouseButton1Click:Connect(function()
     sheathEnabled = not sheathEnabled
@@ -445,6 +468,7 @@ game:GetService("RunService").Heartbeat:Connect(function()
         end
     end
 end)
+
 -- Radar 2D Portátil Integrado en Interfaz
 local RadarFrame = Instance.new("Frame")
 RadarFrame.Name = "Radar2D"
@@ -591,17 +615,10 @@ ResetButton.MouseButton1Click:Connect(function()
         char:FindFirstChildOfClass("Humanoid").Health = 0
     end
 end)
--- NUEVO BOTÓN 8: Sistema de Vuelo (Fly Mod) para la pestaña Misc
-local FlyButton = Instance.new("TextButton")
-styleHackBtn(FlyButton, MiscFrame, "Vuelo (Fly Mode): OFF", 255, Color3.fromRGB(0, 100, 100))
 
--- Aumentar el tamaño del contenedor scroll de Misc para que quepa el botón
-MiscFrame.CanvasSize = UDim2.new(0, 0, 2.5, 0)
-
--- Lógica interna del sistema de Vuelo
-local flyEnabled = false
+-- Sistema de Vuelo (Fly Mod) para la pestaña Misc
 local flyConnection = nil
-local flySpeed = 30 -- Velocidad de vuelo equilibrada y segura
+local flySpeed = 30
 
 FlyButton.MouseButton1Click:Connect(function()
     flyEnabled = not flyEnabled
@@ -615,10 +632,8 @@ FlyButton.MouseButton1Click:Connect(function()
     local humanoid = char:FindFirstChildOfClass("Humanoid")
     
     if flyEnabled then
-        -- Desactivar temporalmente la gravedad del personaje
         if humanoid then humanoid.PlatformStand = true end
         
-        -- Crear un bucle continuo de movimiento basado en la dirección de la cámara
         flyConnection = game:GetService("RunService").Heartbeat:Connect(function()
             if not flyEnabled or not char or not root.Parent then 
                 if flyConnection then flyConnection:Disconnect() end
@@ -628,30 +643,27 @@ FlyButton.MouseButton1Click:Connect(function()
             local cam = game:GetService("Workspace").CurrentCamera
             local moveDirection = Vector3.new(0, 0, 0)
             
-            -- Detectar si el jugador está presionando el botón de saltar para elevarse
             local uis = game:GetService("UserInputService")
             if uis:IsKeyDown(Enum.KeyCode.Space) then
                 moveDirection = moveDirection + Vector3.new(0, 1, 0)
             end
             
-            -- Avanzar automáticamente en la dirección que mira la cámara del celular/PC
             local lookVector = cam.CFrame.LookVector
             moveDirection = moveDirection + lookVector
             
-            -- Aplicar la velocidad de vuelo de forma fluida
             if moveDirection.Magnitude > 0 then
                 root.Velocity = moveDirection.Unit * flySpeed
             else
                 root.Velocity = Vector3.new(0, 0, 0)
             end
             
-            -- Mantener el cuerpo recto mientras vuela
             root.RotVelocity = Vector3.new(0, 0, 0)
         end)
     else
-        -- Restaurar la física normal al apagar el hack
         if flyConnection then flyConnection:Disconnect() end
-        if humanoid then humanoid. = false end
+        if humanoid then humanoid.PlatformStand = false end
         root.Velocity = Vector3.new(0, 0, 0)
     end
 end)
+
+print("Delta MM2 Menu cargado correctamente!")
